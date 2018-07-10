@@ -10,7 +10,9 @@ class Index extends React.Component {
   render() {
     return (
       <Layout>
-      <Pokemons/>
+          <div className="container">
+            <Pokemons/>
+          </div>
       </Layout>
     );
   }

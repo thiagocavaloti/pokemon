@@ -1,17 +1,12 @@
 import React from 'react';
 import Head from 'next/head';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import CircularProgress from 'material-ui/CircularProgress';
 import NProgress from 'nprogress';
 import Router from 'next/router';
 import { connect } from 'react-redux';
 import { fetchPokemons } from '../actions/pokemons/fetch';
-//import {indigo500, indigo700, redA200} from 'material-ui/styles/colors';
-import {getUrlParams} from '../utils';
-import Pokemons from '../components/Pokemons';
-
-import Paper from 'material-ui/Paper';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 Router.onRouteChangeStart = (url) => NProgress.start();
 Router.onRouteChangeComplete = () => {
@@ -33,26 +28,20 @@ class Layout extends React.Component {
     this.state = { loading: true };
   }
 
-
-  getLoader(){
-    return(
-      <div style={{display: 'flex', justifyContent: 'center'}}>
-        <CircularProgress style={{marginRight: 10}}/>
-        <p>Loading...</p>
-      </div>
-    )
-  }
-
   render() {
 
+    const { pokemons, fetching } = this.props.pokemons;
+    console.log('Layout props', this.props);
     return (
+      <MuiThemeProvider>
         <div>
           <Head>
-            <title>{ this.props.title || 'Pokemons' }</title>
+            <title>{'Pokemons'}</title>
             <link rel="stylesheet" href="/static/css/nprogress.css" />
           </Head>
-          <Pokemons/>
+          {this.props.children}
         </div>
+        </MuiThemeProvider>
     )
   }
 }
@@ -63,4 +52,4 @@ const mapStateToProps = ({ pokemons }) => {
   }
 };
 
-export default connect(mapStateToProps, {fetchPokemons})(Layout);
+export default connect(mapStateToProps, {})(Layout);

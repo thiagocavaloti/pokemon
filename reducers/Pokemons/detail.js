@@ -4,7 +4,7 @@ import {
 } from '../../actions';
 
 const INITIAL_STATE = {
-  fetching: false,
+  fetching: true,
   pokemon: []
 };
 

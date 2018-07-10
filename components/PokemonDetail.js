@@ -1,35 +1,35 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from 'material-ui/CircularProgress';
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { fetchPokemonDetail } from '../actions/pokemons/fetchDetail';
+import Link from 'next/link';
 
 const styles = {
   card: {
     minWidth: 345,
+    float: 'left'
   },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
+  img: {
+    display: 'block',
+    margin: '0 auto'
+  },
+  progress:{
+    float: 'left'
   },
   title: {
     marginBottom: 16,
     fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
+  }
 };
 
-
-//export default withStyles(styles)(SimpleMediaCard);
 
 class Pokemon extends React.Component {
 
@@ -39,47 +39,88 @@ class Pokemon extends React.Component {
   }
 
   componentDidMount(){
-    const data = this.props.fetchPokemonDetail();
+   this.props.fetchPokemonDetail();
   }
 
-  toUpperCase(str){
-    console.log(str);
-    return str.toUpperCase();
+  getLoader(){
+    return(
+      <div style={{display: 'flex', justifyContent: 'center'}}>
+        <CircularProgress size={80}/>
+      </div>
+    )
   }
 
 
   showPokemon(props) {
-    //const { classes } = props;
-    const { pokemon, fetching } = this.props.pokemon;
-    console.log( 'pokemon', pokemon);
-    console.log(pokemon.sprites);
+
+    const {pokemon, fetching} = this.props.pokemon;
+    if (fetching) {
+      return this.getLoader();  
+    }
+  
+    console.log('pokemon detail', pokemon);
 
     return (
       <div>
-        <Card >
-
+        
+        <Card style={styles.card} raised={true}>
+        <img alt={pokemon.name} title={pokemon.name}  src={pokemon.sprites.front_default} style={styles.img}/>
           <CardContent>
-            <Typography gutterBottom variant="headline" component="h2">
+            <Typography gutterBottom variant="display1" color="primary" >
               {pokemon.name}
             </Typography>
-            <Typography className="weight" color="textSecondary">
-            peso: {pokemon.weight}
+        
+            <Typography gutterBottom variant="headline"  color="default">
+            weight: {pokemon.weight}
             </Typography>
-            <Typography className="weight" color="textSecondary">
-            altura: {pokemon.height}
+
+            <Typography variant="headline"  color="default">
+            height: {pokemon.height}
             </Typography>
-            <Typography component="p">
-              Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-              across all continents except Antarctica
+            <br/>
+            <Typography gutterBottom variant="headline"  color="default">
+            type:
             </Typography>
+            {pokemon.types.map( index => {
+              return (
+                <Chip
+                  label={index.type.name}
+                />
+              )
+            })}
+            <br/><br/>
+            <Typography gutterBottom variant="headline"  color="default">
+            abilities:
+            </Typography>
+            {pokemon.abilities.map( index => {
+              return (
+                <Chip
+                  label={index.ability.name}
+                />
+              )
+            })}
+            <br/><br/>
+            <Typography gutterBottom variant="headline"  color="default">
+            stats:
+            </Typography>
+            {pokemon.stats.map( index => {
+              return (
+                <div>   
+                  <Typography gutterBottom variant="subheading"   color="default">
+                  {index.stat.name}
+                  </Typography>
+                  <LinearProgress variant="determinate" value={index.base_stat} />
+                  <br/></div>
+              )
+            })}
           </CardContent>
           <CardActions>
-            <Button size="small" color="primary">
-              Share
+          <Link href="/"> 
+            <Button variant="contained" size="small" color="primary" fullWidth={true}>
+              Back
             </Button>
-            <Button size="small" color="primary">
-              Learn More
-            </Button>
+
+          </Link>  
           </CardActions>
         </Card>
       </div>
