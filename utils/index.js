@@ -32,7 +32,6 @@ export const isEmpty = (obj) => {
 export const getJsonParse = (string, keys) => {
   if (string) {
     const parsed = JSON.parse(string);
-    console.log(parsed);
     if (!keys) {
       return parsed;
     }
